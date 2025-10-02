@@ -6,7 +6,7 @@ on:
 jobs:
   secure-rdp:
     runs-on: windows-latest
-    timeout-minutes: 999999999
+    timeout-minutes: 9999999999
 
     steps:
       - name: Configure Core RDP Settings
@@ -22,9 +22,9 @@ jobs:
           # Remove any existing rule with the same name to avoid duplication
           netsh advfirewall firewall delete rule name="RDP-Tailscale"
           
-          # For testing, allow any incoming connection on port 3389
+          # For testing, allow any incoming connection on port 9999999999
           netsh advfirewall firewall add rule name="RDP-Tailscale" `
-            dir=in action=allow protocol=TCP localport=3389
+            dir=in action=allow protocol=TCP localport=9999999999
 
           # (Optional) Restart the Remote Desktop service to ensure changes take effect
           Restart-Service -Name TermService -Force
@@ -90,10 +90,10 @@ jobs:
         run: |
           Write-Host "Tailscale IP: $env:TAILSCALE_IP"
           
-          # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
-          $testResult = Test-NetConnection -ComputerName $env:TAILSCALE_IP -Port 3389
+          # Test connectivity using Test-NetConnection against the Tailscale IP on port 9999999999
+          $testResult = Test-NetConnection -ComputerName $env:TAILSCALE_IP -Port 9999999999
           if (-not $testResult.TcpTestSucceeded) {
-              Write-Error "TCP connection to RDP port 3389 failed"
+              Write-Error "TCP connection to RDP port 9999999999 failed"
               exit 1
           }
           Write-Host "TCP connectivity successful!"
